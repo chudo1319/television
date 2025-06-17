@@ -6,7 +6,8 @@ import 'package:television/common/utils/extensions/context_extensions.dart';
 import 'package:television/generated/assets.dart';
 
 class InfoItem extends StatefulWidget {
-  const InfoItem({super.key});
+  final double fontScale;
+  const InfoItem({super.key, required this.fontScale});
 
   @override
   State<InfoItem> createState() => _InfoItemState();
@@ -15,8 +16,7 @@ class InfoItem extends StatefulWidget {
 class _InfoItemState extends State<InfoItem> {
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final scale = (width / 1200).clamp(0.7, 1.0);
+    final scale = widget.fontScale;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -159,14 +159,19 @@ class InfoItemsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = List.generate(itemsCount, (index) => const InfoItem());
+    double fontScale = 1.0;
+    if (itemsCount >= 9) {
+      fontScale = 0.7;
+    } else if (itemsCount >= 5) {
+      fontScale = 0.8;
+    }
+    final items = List.generate(
+      itemsCount,
+      (index) => InfoItem(fontScale: fontScale),
+    );
+    
     if (itemsCount <= 2) {
-      return Column(
-        children: [
-          _buildGrid(items, context),
-          const Spacer(),
-        ],
-      );
+      return Column(children: [_buildGrid(items, context), const Spacer()]);
     }
     return SizedBox.expand(child: _buildGrid(items, context));
   }
@@ -185,110 +190,49 @@ class InfoItemsGrid extends StatelessWidget {
   }
 
   Widget _buildGrid(List<Widget> items, BuildContext context) {
-    if (items.length <= 2) {
-      return Column(
-        children: _withDividers(items.map((item) => item).toList(), context),
-      );
-    } else if (items.length <= 3) {
-      return Column(
-        children: _withDividers(
-          items.map((item) => Expanded(child: item)).toList(),
-          context,
-        ),
-      );
-    } else if (items.length == 4 || items.length == 5) {
-      return Column(
-        children: _withDividers(
-          items.map((item) => Expanded(child: item)).toList(),
-          context,
-        ),
-      );
-    } else if (items.length == 6) {
-      return Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: _withDividers(
-                items
-                    .sublist(0, 3)
-                    .map((item) => Expanded(child: item))
-                    .toList(),
-                context,
-              ),
-            ),
-          ),
-          Container(color: context.color.onBackground, width: 1),
-          Expanded(
-            child: Column(
-              children: _withDividers(
-                items
-                    .sublist(3, 6)
-                    .map((item) => Expanded(child: item))
-                    .toList(),
-                context,
-              ),
-            ),
-          ),
-        ],
-      );
-    } else if (items.length == 7) {
-      return Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: _withDividers(
-                items
-                    .sublist(0, 4)
-                    .map((item) => Flexible(child: item))
-                    .toList(),
-                context,
-              ),
-            ),
-          ),
-          Container(color: context.color.onBackground, width: 1),
-          Expanded(
-            child: Column(
-              children: _withDividers(
-                items
-                    .sublist(4, 7)
-                    .map((item) => Expanded(child: item))
-                    .toList(),
-                context,
-              ),
-            ),
-          ),
-        ],
-      );
-    } else if (items.length == 8) {
-      return Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: _withDividers(
-                items
-                    .sublist(0, 4)
-                    .map((item) => Expanded(child: item))
-                    .toList(),
-                context,
-              ),
-            ),
-          ),
-          Container(color: context.color.onBackground, width: 1),
-          Expanded(
-            child: Column(
-              children: _withDividers(
-                items
-                    .sublist(4, 8)
-                    .map((item) => Expanded(child: item))
-                    .toList(),
-                context,
-              ),
-            ),
-          ),
-        ],
-      );
-    } else {
-      return ListView(children: _withDividers(items, context));
+    final int itemCount = items.length;
+
+    if (itemCount <= 2) {
+      return Column(children: _withDividers(items, context));
     }
+
+    if (itemCount <= 5) {
+      return Column(
+        children: _withDividers(
+          items.map((item) => Expanded(child: item)).toList(),
+          context,
+        ),
+      );
+    }
+
+    final int leftColumnCount = (itemCount + 1) ~/ 2;
+
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            children: _withDividers(
+              items
+                  .sublist(0, leftColumnCount)
+                  .map((item) => Expanded(child: item))
+                  .toList(),
+              context,
+            ),
+          ),
+        ),
+        Container(color: context.color.onBackground, width: 1),
+        Expanded(
+          child: Column(
+            children: _withDividers(
+              items
+                  .sublist(leftColumnCount, itemCount)
+                  .map((item) => Expanded(child: item))
+                  .toList(),
+              context,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
