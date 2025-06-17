@@ -10,6 +10,9 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   theme_tailor: ^3.0.3
+  flutter_svg: ^2.2.0
+  intl: ^0.20.2
+  gap: ^3.0.1
 
 dev_dependencies:
   flutter_test:

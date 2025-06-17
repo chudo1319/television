@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:television/screens/main%20/main_screen.dart';
 
 import 'common/styles/themes/app_theme_data.dart';
 
@@ -14,6 +15,7 @@ class Television extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.lightTheme,
+      home: const MainScreen(),
     );
   }
 }
