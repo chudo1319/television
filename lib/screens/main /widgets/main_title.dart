@@ -8,6 +8,8 @@ class MainTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const minFontSize = 40.0;
+
     return Column(
       children: [
         Stack(
@@ -22,6 +24,10 @@ class MainTitle extends StatelessWidget {
                   DateFormat('dd.MM.yyyy HH:mm').format(DateTime.now()),
                   style: context.text.medium24.copyWith(
                     color: context.color.onBackground,
+                    fontSize: context.text.medium24.fontSize?.clamp(
+                      minFontSize,
+                      40.0,
+                    ),
                   ),
                 ),
               ],
@@ -31,6 +37,10 @@ class MainTitle extends StatelessWidget {
                 'Электрозарядка',
                 style: context.text.semiBold31.copyWith(
                   color: context.color.onBackground,
+                  fontSize: context.text.semiBold31.fontSize?.clamp(
+                    minFontSize,
+                    60.0,
+                  ),
                 ),
               ),
             ),

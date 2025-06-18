@@ -17,6 +17,7 @@ class _InfoItemState extends State<InfoItem> {
   @override
   Widget build(BuildContext context) {
     final scale = widget.fontScale;
+    final minFontSize = 24.0;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -36,14 +37,14 @@ class _InfoItemState extends State<InfoItem> {
                         '#2 / ',
                         style: context.text.semiBold24.copyWith(
                           color: context.color.onBackground,
-                          fontSize: 36 * scale,
+                          fontSize: (50 * scale).clamp(minFontSize, 80.0),
                         ),
                       ),
                       Text(
                         'CCS2',
                         style: context.text.regular24.copyWith(
                           color: context.color.onBackground,
-                          fontSize: 36 * scale,
+                          fontSize: (50 * scale).clamp(minFontSize, 80.0),
                         ),
                       ),
                     ],
@@ -53,7 +54,7 @@ class _InfoItemState extends State<InfoItem> {
                     'Заряжается',
                     style: context.text.semiBold24.copyWith(
                       color: context.color.onBackground,
-                      fontSize: 24 * scale,
+                      fontSize: (25 * scale).clamp(minFontSize, 50.0),
                     ),
                   ),
                   Gap(AppSizes.double4),
@@ -63,7 +64,7 @@ class _InfoItemState extends State<InfoItem> {
                         'Начало',
                         style: context.text.regular16.copyWith(
                           color: context.color.onBackground,
-                          fontSize: 16 * scale,
+                          fontSize: (25 * scale).clamp(minFontSize, 50.0),
                         ),
                       ),
                       Gap(AppSizes.double12),
@@ -71,7 +72,7 @@ class _InfoItemState extends State<InfoItem> {
                         '17:02',
                         style: context.text.regular16.copyWith(
                           color: context.color.onBackground,
-                          fontSize: 16 * scale,
+                          fontSize: (25 * scale).clamp(minFontSize, 50.0),
                         ),
                       ),
                     ],
@@ -82,7 +83,7 @@ class _InfoItemState extends State<InfoItem> {
                         'Длительность',
                         style: context.text.regular16.copyWith(
                           color: context.color.onBackground,
-                          fontSize: 16 * scale,
+                          fontSize: (25 * scale).clamp(minFontSize, 50.0),
                         ),
                       ),
                       Gap(AppSizes.double12),
@@ -90,7 +91,7 @@ class _InfoItemState extends State<InfoItem> {
                         '8 мин',
                         style: context.text.regular16.copyWith(
                           color: context.color.onBackground,
-                          fontSize: 16 * scale,
+                          fontSize: (25 * scale).clamp(minFontSize, 50.0),
                         ),
                       ),
                     ],
@@ -112,7 +113,7 @@ class _InfoItemState extends State<InfoItem> {
                         '2.7 кВт•ч',
                         style: context.text.semiBold24.copyWith(
                           color: context.color.onBackground,
-                          fontSize: 36 * scale,
+                          fontSize: (50 * scale).clamp(minFontSize, 80.0),
                         ),
                       ),
                       Gap(AppSizes.double4),
@@ -120,7 +121,7 @@ class _InfoItemState extends State<InfoItem> {
                         '2% ⇒ 13%',
                         style: context.text.regular16.copyWith(
                           color: context.color.onBackground,
-                          fontSize: 24 * scale,
+                          fontSize: (45 * scale).clamp(minFontSize, 70.0),
                         ),
                       ),
                     ],
@@ -128,7 +129,7 @@ class _InfoItemState extends State<InfoItem> {
                 ],
               ),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
                     Assets.iconsFlash,
@@ -139,7 +140,7 @@ class _InfoItemState extends State<InfoItem> {
                     '20.7 кВт',
                     style: context.text.semiBold31.copyWith(
                       color: context.color.onBackground,
-                      fontSize: 31 * scale,
+                      fontSize: (45 * scale).clamp(minFontSize, 70.0),
                     ),
                   ),
                 ],
@@ -160,16 +161,19 @@ class InfoItemsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double fontScale = 1.0;
-    if (itemsCount >= 9) {
-      fontScale = 0.7;
+
+    if (itemsCount >= 11) {
+      fontScale = 0.6;  
+    } else if (itemsCount >= 9) {
+      fontScale = 0.6;
     } else if (itemsCount >= 5) {
-      fontScale = 0.8;
+      fontScale = 0.9;
     }
     final items = List.generate(
       itemsCount,
       (index) => InfoItem(fontScale: fontScale),
     );
-    
+
     if (itemsCount <= 2) {
       return Column(children: [_buildGrid(items, context), const Spacer()]);
     }

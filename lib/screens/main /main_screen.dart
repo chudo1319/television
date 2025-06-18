@@ -15,7 +15,7 @@ class MainScreen extends StatelessWidget {
           child: Column(
             children: [
               MainTitle(),
-              Expanded(child: InfoItemsGrid(itemsCount: 15)),
+              Expanded(child: InfoItemsGrid(itemsCount: 12)),
             ],
           ),
         ),

@@ -1,6 +1,6 @@
 name: television
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -13,6 +13,7 @@ dependencies:
   flutter_svg: ^2.2.0
   intl: ^0.20.2
   gap: ^3.0.1
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
