@@ -260,7 +260,7 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> with _$AppColorSchem
         avatarBorderOnBackground = const Color(0xFFE7E7E7),
         freeStatus = const Color(0xFF35C518),
         connectedStatus = const Color.fromARGB(255, 250, 178, 45),
-        chargingStatus = const Color(0xFF23DDF9),
+        chargingStatus = const Color.fromARGB(255, 13, 128, 223),
         disabledStatus = const Color(0xFF7C7C7C),
         errorStatus = const Color(0xFFDF3222);
 }

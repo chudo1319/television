@@ -124,6 +124,6 @@ class ChargingController extends GetxController {
   ];
 
   void _loadMockData() {
-    stations.value = List.generate(10, (index) => _mockData[index]);
+    stations.value = List.generate(3, (index) => _mockData[index]);
   }
 }

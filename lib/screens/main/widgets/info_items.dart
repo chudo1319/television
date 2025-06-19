@@ -11,10 +11,7 @@ import 'package:television/models/charging_station.dart';
 class EmptyInfoItem extends StatelessWidget {
   final double fontScale;
 
-  const EmptyInfoItem({
-    super.key,
-    required this.fontScale,
-  });
+  const EmptyInfoItem({super.key, required this.fontScale});
 
   @override
   Widget build(BuildContext context) {
@@ -107,41 +104,47 @@ class _InfoItemState extends State<InfoItem> {
                     ),
                   Row(
                     children: [
-                      Text(
-                        'Начало',
-                        style: context.text.regular16.copyWith(
-                          color: context.color.textFieldHelper,
-                          fontSize: (25 * scale).clamp(minFontSize, 50.0),
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Начало',
+                            style: context.text.regular16.copyWith(
+                              color: context.color.textFieldHelper,
+                              fontSize: (25 * scale).clamp(minFontSize, 50.0),
+                            ),
+                          ),
+                          Gap(AppSizes.double12),
+                          Text(
+                            'Сессия',
+                            style: context.text.regular16.copyWith(
+                              color: context.color.textFieldHelper,
+                              fontSize: (25 * scale).clamp(minFontSize, 50.0),
+                            ),
+                          ),
+                        ],
                       ),
-                      Gap(AppSizes.double12),
-                      Text(
-                        '${station.startTime.hour.toString().padLeft(2, '0')}:${station.startTime.minute.toString().padLeft(2, '0')}',
-                        style: context.text.regular16.copyWith(
-                          color: context.color.onBackground,
-                          fontSize: (25 * scale).clamp(minFontSize, 50.0),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Gap(AppSizes.double5),
-                  Row(
-                    children: [
-                      Text(
-                        'Сессия',
-                        style: context.text.regular16.copyWith(
-                          color: context.color.textFieldHelper,
-                          fontSize: (25 * scale).clamp(minFontSize, 50.0),
-                        ),
-                      ),
-                      Gap(AppSizes.double12),
-                      Text(
-                        // '${station.durationMinutes} мин',
-                        '11ч 45м',
-                        style: context.text.regular16.copyWith(
-                          color: context.color.onBackground,
-                          fontSize: (25 * scale).clamp(minFontSize, 50.0),
-                        ),
+                      Gap(AppSizes.double5),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${station.startTime.hour.toString().padLeft(2, '0')}:${station.startTime.minute.toString().padLeft(2, '0')}',
+                            style: context.text.regular16.copyWith(
+                              color: context.color.onBackground,
+                              fontSize: (25 * scale).clamp(minFontSize, 50.0),
+                            ),
+                          ),
+                          Gap(AppSizes.double12),
+                          Text(
+                            // '${station.durationMinutes} мин',
+                            '11ч 45м',
+                            style: context.text.regular16.copyWith(
+                              color: context.color.onBackground,
+                              fontSize: (25 * scale).clamp(minFontSize, 50.0),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -249,10 +252,6 @@ class InfoItemsGrid extends StatelessWidget {
               ),
             )
             .toList();
-
-    if (itemsCount <= 2) {
-      return Column(children: [_buildGrid(items, context), const Spacer()]);
-    }
     return SizedBox.expand(child: _buildGrid(items, context));
   }
 
@@ -273,7 +272,24 @@ class InfoItemsGrid extends StatelessWidget {
     final int itemCount = items.length;
 
     if (itemCount <= 2) {
-      return Column(children: _withDividers(items, context));
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final itemHeight = constraints.maxHeight / 3;
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              for (int i = 0; i < items.length; i++) ...[
+                SizedBox(
+                  height: itemHeight,
+                  child: items[i],
+                ),
+                Divider(color: context.color.onBackground, thickness: 1, height: 1),
+              ],
+              const Spacer(),
+            ],
+          );
+        },
+      );
     }
 
     if (itemCount <= 5) {
@@ -288,7 +304,9 @@ class InfoItemsGrid extends StatelessWidget {
     final int leftColumnCount = (itemCount + 1) ~/ 2;
     final bool needsEmptyCell = itemCount > 5 && itemCount % 2 != 0;
 
-    final rightColumnItems = List<Widget>.from(items.sublist(leftColumnCount, itemCount));
+    final rightColumnItems = List<Widget>.from(
+      items.sublist(leftColumnCount, itemCount),
+    );
     if (needsEmptyCell) {
       rightColumnItems.add(EmptyInfoItem(fontScale: 1.0));
     }
@@ -310,9 +328,7 @@ class InfoItemsGrid extends StatelessWidget {
         Expanded(
           child: Column(
             children: _withDividers(
-              rightColumnItems
-                  .map((item) => Expanded(child: item))
-                  .toList(),
+              rightColumnItems.map((item) => Expanded(child: item)).toList(),
               context,
             ),
           ),
