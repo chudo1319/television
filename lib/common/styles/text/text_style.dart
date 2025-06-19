@@ -14,7 +14,7 @@ enum AppTextStyle {
       fontFamily: 'OpenSans',
       fontWeight: FontWeight.w600,
       fontSize: 24,
-      height: 1.2,
+      height: 1,
     ),
   ),
   semiBold31(

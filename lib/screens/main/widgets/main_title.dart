@@ -9,7 +9,7 @@ class MainTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const minFontSize = 40.0;
+    const minFontSize = 60.0;
 
     return Column(
       children: [
@@ -29,7 +29,7 @@ class MainTitle extends StatelessWidget {
                       color: context.color.onBackground,
                       fontSize: context.text.medium24.fontSize?.clamp(
                         minFontSize,
-                        40.0,
+                        100.0,
                       ),
                     ),
                   ),
@@ -43,7 +43,7 @@ class MainTitle extends StatelessWidget {
                   color: context.color.onBackground,
                   fontSize: context.text.semiBold31.fontSize?.clamp(
                     minFontSize,
-                    60.0,
+                    100.0,
                   ),
                 ),
               ),

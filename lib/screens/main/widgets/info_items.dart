@@ -7,6 +7,7 @@ import 'package:television/common/styles/app_sizes.dart';
 import 'package:television/common/utils/extensions/context_extensions.dart';
 import 'package:television/generated/assets.dart';
 import 'package:television/models/charging_station.dart';
+import 'package:television/screens/main/widgets/start_row.dart';
 
 class EmptyInfoItem extends StatelessWidget {
   final double fontScale;
@@ -42,175 +43,42 @@ class _InfoItemState extends State<InfoItem> {
     final minFontSize = 40.0;
     final station = widget.station;
     final itemsCount = widget.itemsCount;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSizes.double24),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment:
+                itemsCount <= 5
+                    ? CrossAxisAlignment.center
+                    : CrossAxisAlignment.end,
             children: [
               if (itemsCount <= 5)
-                Row(
-                  children: [
-                    Container(
-                      width: 90 * scale,
-                      height: 90 * scale,
-                      decoration: BoxDecoration(
-                        color: context.color.onTertiary,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: getStatusColor(station.status, context),
-                          width: 2,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          station.id,
-                          style: context.text.semiBold24.copyWith(
-                            color: getStatusColor(station.status, context),
-                            fontSize: (70 * scale).clamp(minFontSize, 100.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Gap(AppSizes.double40),
-                  ],
+                StartRowLessFive(
+                  station: station,
+                  minFontSize: minFontSize,
+                  scale: scale,
                 ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (itemsCount > 5)
-                    Container(
-                      width: 90 * scale,
-                      height: 90 * scale,
-                      decoration: BoxDecoration(
-                        color: context.color.onTertiary,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: getStatusColor(station.status, context),
-                          width: 2,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          station.id,
-                          style: context.text.semiBold24.copyWith(
-                            color: getStatusColor(station.status, context),
-                            fontSize: (70 * scale).clamp(minFontSize, 100.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Начало',
-                            style: context.text.regular16.copyWith(
-                              color: context.color.textFieldHelper,
-                              fontSize: (25 * scale).clamp(minFontSize, 50.0),
-                            ),
-                          ),
-                          Gap(AppSizes.double12),
-                          Text(
-                            'Сессия',
-                            style: context.text.regular16.copyWith(
-                              color: context.color.textFieldHelper,
-                              fontSize: (25 * scale).clamp(minFontSize, 50.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Gap(AppSizes.double5),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${station.startTime.hour.toString().padLeft(2, '0')}:${station.startTime.minute.toString().padLeft(2, '0')}',
-                            style: context.text.regular16.copyWith(
-                              color: context.color.onBackground,
-                              fontSize: (25 * scale).clamp(minFontSize, 50.0),
-                            ),
-                          ),
-                          Gap(AppSizes.double12),
-                          Text(
-                            // '${station.durationMinutes} мин',
-                            '11ч 45м',
-                            style: context.text.regular16.copyWith(
-                              color: context.color.onBackground,
-                              fontSize: (25 * scale).clamp(minFontSize, 50.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      '${station.powerConsumed.toStringAsFixed(1)} кВт•ч',
-                      style: context.text.regular16.copyWith(
-                        color: context.color.onBackground,
-                        fontSize: (20 * scale).clamp(minFontSize, 80.0),
-                      ),
-                    ),
-                    Gap(AppSizes.double5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        SvgPicture.asset(
-                          Assets.iconsCharge,
-                          width: 45 * scale,
-                          height: 45 * scale,
-                        ),
-                        Text(
-                          '${station.startPercentage}% ⇒ ${station.currentPercentage}%',
-                          style: context.text.semiBold24.copyWith(
-                            color: context.color.onBackground,
-                            fontSize: (45 * scale).clamp(minFontSize, 70.0),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+              if (itemsCount > 5)
+                StartRowMoreFive(
+                  station: station,
+                  minFontSize: minFontSize,
+                  scale: scale,
                 ),
+              CenterRow(
+                station: station,
+                minFontSize: minFontSize,
+                scale: scale,
+                itemCount: itemsCount,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    station.status.toString(),
-                    style: context.text.semiBold24.copyWith(
-                      color: getStatusColor(station.status, context),
-                      fontSize: (25 * scale).clamp(minFontSize, 50.0),
-                    ),
-                  ),
-                  Gap(AppSizes.double5),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      SvgPicture.asset(
-                        Assets.iconsFlash,
-                        width: 45 * scale,
-                        height: 45 * scale,
-                      ),
-                      Text(
-                        '${station.powerOutput.toStringAsFixed(1)} кВт',
-                        style: context.text.semiBold31.copyWith(
-                          color: context.color.onBackground,
-                          fontSize: (45 * scale).clamp(minFontSize, 70.0),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              EndRow(
+                station: station,
+                minFontSize: minFontSize,
+                scale: scale,
+                itemCount: itemsCount,
               ),
             ],
           ),
@@ -279,11 +147,12 @@ class InfoItemsGrid extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               for (int i = 0; i < items.length; i++) ...[
-                SizedBox(
-                  height: itemHeight,
-                  child: items[i],
+                SizedBox(height: itemHeight, child: items[i]),
+                Divider(
+                  color: context.color.onBackground,
+                  thickness: 1,
+                  height: 1,
                 ),
-                Divider(color: context.color.onBackground, thickness: 1, height: 1),
               ],
               const Spacer(),
             ],

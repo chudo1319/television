@@ -10,9 +10,11 @@ class ChargingController extends GetxController {
     _loadMockData();
   }
 
+  int get maxStations => _mockData.length;
+
   final List<ChargingStation> _mockData = [
     ChargingStation(
-        id: '1',
+        id: '7',
         name: 'CCS2',
         status: ChargingStationStatus.charging,
         startTime: DateTime.now().subtract(const Duration(minutes: 8)),
@@ -23,10 +25,10 @@ class ChargingController extends GetxController {
         powerOutput: 20.7,
       ),
       ChargingStation(
-        id: '2',
+        id: '8',
         name: 'CCS1',
         status: ChargingStationStatus.waiting,
-        startTime: DateTime.now(),
+        startTime: DateTime.now().subtract(const Duration(minutes: 6)),
         durationMinutes: 0,
         powerConsumed: 0.0,
         startPercentage: 0,
@@ -37,7 +39,7 @@ class ChargingController extends GetxController {
         id: '3',
         name: 'CCS3',
         status: ChargingStationStatus.completed,
-        startTime: DateTime.now().subtract(const Duration(hours: 2)),
+        startTime: DateTime.now().subtract(const Duration(minutes: 10)),
         durationMinutes: 45,
         powerConsumed: 100,
         startPercentage: 10,
@@ -45,10 +47,10 @@ class ChargingController extends GetxController {
         powerOutput: 240.0,
       ),
       ChargingStation(
-        id: '4',
+        id: '1',
         name: 'CCS4',
         status: ChargingStationStatus.charging,
-        startTime: DateTime.now().subtract(const Duration(minutes: 15)),
+        startTime: DateTime.now().subtract(const Duration(minutes: 5)),
         durationMinutes: 15,
         powerConsumed: 5.1,
         startPercentage: 15,
@@ -59,7 +61,29 @@ class ChargingController extends GetxController {
         id: '5',
         name: 'CCS4',
         status: ChargingStationStatus.charging,
-        startTime: DateTime.now().subtract(const Duration(minutes: 15)),
+        startTime: DateTime.now().subtract(const Duration(minutes: 8)),
+        durationMinutes: 15,
+        powerConsumed: 5.1,
+        startPercentage: 15,
+        currentPercentage: 35,
+        powerOutput: 18.3,
+      ),
+      ChargingStation(
+        id: '2',
+        name: 'CCS6',
+        status: ChargingStationStatus.charging,
+        startTime: DateTime.now().subtract(const Duration(minutes: 3)),
+        durationMinutes: 15,
+        powerConsumed: 5.1,
+        startPercentage: 15,
+        currentPercentage: 35,
+        powerOutput: 18.3,
+      ),
+      ChargingStation(
+        id: '4',
+        name: 'CCS7',
+        status: ChargingStationStatus.waiting,
+        startTime: DateTime.now().subtract(const Duration(minutes: 1)),
         durationMinutes: 15,
         powerConsumed: 5.1,
         startPercentage: 15,
@@ -68,31 +92,9 @@ class ChargingController extends GetxController {
       ),
       ChargingStation(
         id: '6',
-        name: 'CCS6',
-        status: ChargingStationStatus.charging,
-        startTime: DateTime.now().subtract(const Duration(minutes: 15)),
-        durationMinutes: 15,
-        powerConsumed: 5.1,
-        startPercentage: 15,
-        currentPercentage: 35,
-        powerOutput: 18.3,
-      ),
-      ChargingStation(
-        id: '7',
-        name: 'CCS7',
-        status: ChargingStationStatus.waiting,
-        startTime: DateTime.now().subtract(const Duration(minutes: 15)),
-        durationMinutes: 15,
-        powerConsumed: 5.1,
-        startPercentage: 15,
-        currentPercentage: 35,
-        powerOutput: 18.3,
-      ),
-      ChargingStation(
-        id: '8',
         name: 'CCS8',
         status: ChargingStationStatus.charging,
-        startTime: DateTime.now().subtract(const Duration(minutes: 15)),
+        startTime: DateTime.now(),
         durationMinutes: 15,
         powerConsumed: 5.1,
         startPercentage: 15,
@@ -114,7 +116,7 @@ class ChargingController extends GetxController {
         id: '10',
         name: 'CCS10',
         status: ChargingStationStatus.waiting,
-        startTime: DateTime.now().subtract(const Duration(minutes: 15)),
+        startTime: DateTime.now().subtract(const Duration(minutes: 13)),
         durationMinutes: 15,
         powerConsumed: 5.1,
         startPercentage: 15,
@@ -124,6 +126,16 @@ class ChargingController extends GetxController {
   ];
 
   void _loadMockData() {
-    stations.value = List.generate(3, (index) => _mockData[index]);
+    final sortedStations = List.of(_mockData)
+      ..sort((b, a) => b.startTime.compareTo(a.startTime));
+    stations.value = List.generate(10, (index) => sortedStations[index]);
+  }
+
+  void addNextStation() {
+    if (stations.length < _mockData.length) {
+      final List<ChargingStation> allStations = List.of(_mockData)
+        ..sort((b, a) => b.startTime.compareTo(a.startTime));
+      stations.value = allStations.sublist(0, stations.length + 1);
+    }
   }
 }
