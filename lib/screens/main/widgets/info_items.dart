@@ -8,6 +8,20 @@ import 'package:television/common/utils/extensions/context_extensions.dart';
 import 'package:television/generated/assets.dart';
 import 'package:television/models/charging_station.dart';
 
+class EmptyInfoItem extends StatelessWidget {
+  final double fontScale;
+
+  const EmptyInfoItem({
+    super.key,
+    required this.fontScale,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox.expand();
+  }
+}
+
 class InfoItem extends StatefulWidget {
   final double fontScale;
   final ChargingStation station;
@@ -272,6 +286,12 @@ class InfoItemsGrid extends StatelessWidget {
     }
 
     final int leftColumnCount = (itemCount + 1) ~/ 2;
+    final bool needsEmptyCell = itemCount > 5 && itemCount % 2 != 0;
+
+    final rightColumnItems = List<Widget>.from(items.sublist(leftColumnCount, itemCount));
+    if (needsEmptyCell) {
+      rightColumnItems.add(EmptyInfoItem(fontScale: 1.0));
+    }
 
     return Row(
       children: [
@@ -290,8 +310,7 @@ class InfoItemsGrid extends StatelessWidget {
         Expanded(
           child: Column(
             children: _withDividers(
-              items
-                  .sublist(leftColumnCount, itemCount)
+              rightColumnItems
                   .map((item) => Expanded(child: item))
                   .toList(),
               context,
