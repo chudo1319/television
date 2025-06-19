@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:television/common/func/get_status_color.dart';
 import 'package:television/common/styles/app_sizes.dart';
 import 'package:television/common/utils/extensions/context_extensions.dart';
-import 'package:television/generated/assets.dart';
 import 'package:television/models/charging_station.dart';
 import 'package:television/screens/main/widgets/start_row.dart';
 
