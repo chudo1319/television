@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:television/screens/main%20/main_screen.dart';
+import 'package:television/screens/main/main_screen.dart';
 
 import 'common/styles/themes/app_theme_data.dart';
 
