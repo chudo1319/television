@@ -1,7 +1,25 @@
+enum ChargingStationStatus {
+  charging,
+  completed,
+  waiting;
+
+  @override
+  String toString() {
+    switch (this) {
+      case ChargingStationStatus.charging:
+        return 'Заряжается';
+      case ChargingStationStatus.completed:
+        return 'Зарядилось';
+      case ChargingStationStatus.waiting:
+        return 'Ожидает';
+    }
+  }
+}
+
 class ChargingStation {
   final String id;
   final String name;
-  final String status;
+  final ChargingStationStatus status;
   final DateTime startTime;
   final int durationMinutes;
   final double powerConsumed;
@@ -24,7 +42,7 @@ class ChargingStation {
   ChargingStation copyWith({
     String? id,
     String? name,
-    String? status,
+    ChargingStationStatus? status,
     DateTime? startTime,
     int? durationMinutes,
     double? powerConsumed,
@@ -35,7 +53,7 @@ class ChargingStation {
     return ChargingStation(
       id: id ?? this.id,
       name: name ?? this.name,
-      status: status ?? this.status,
+      status: status ?? this.status,  
       startTime: startTime ?? this.startTime,
       durationMinutes: durationMinutes ?? this.durationMinutes,
       powerConsumed: powerConsumed ?? this.powerConsumed,
