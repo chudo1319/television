@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:television/common/styles/app_sizes.dart';
+import 'package:television/controllers/charging_controller.dart';
 import 'package:television/screens/main%20/widgets/info_items.dart';
 import 'package:television/screens/main%20/widgets/main_title.dart';
 
@@ -8,6 +10,8 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ChargingController());
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -15,7 +19,14 @@ class MainScreen extends StatelessWidget {
           child: Column(
             children: [
               MainTitle(),
-              Expanded(child: InfoItemsGrid(itemsCount: 12)),
+              Obx(
+                () => Expanded(
+                  child: InfoItemsGrid(
+                    itemsCount: controller.stations.length,
+                    stations: controller.stations,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

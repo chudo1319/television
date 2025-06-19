@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:television/common/styles/app_sizes.dart';
 import 'package:television/common/utils/extensions/context_extensions.dart';
 import 'package:television/generated/assets.dart';
+import 'package:television/models/charging_station.dart';
 
 class InfoItem extends StatefulWidget {
   final double fontScale;
-  const InfoItem({super.key, required this.fontScale});
+  final ChargingStation station;
+
+  const InfoItem({super.key, required this.fontScale, required this.station});
 
   @override
   State<InfoItem> createState() => _InfoItemState();
@@ -18,6 +22,7 @@ class _InfoItemState extends State<InfoItem> {
   Widget build(BuildContext context) {
     final scale = widget.fontScale;
     final minFontSize = 24.0;
+    final station = widget.station;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -34,14 +39,14 @@ class _InfoItemState extends State<InfoItem> {
                   Row(
                     children: [
                       Text(
-                        '#2 / ',
+                        '#${station.id} / ',
                         style: context.text.semiBold24.copyWith(
                           color: context.color.onBackground,
                           fontSize: (50 * scale).clamp(minFontSize, 80.0),
                         ),
                       ),
                       Text(
-                        'CCS2',
+                        station.name,
                         style: context.text.regular24.copyWith(
                           color: context.color.onBackground,
                           fontSize: (50 * scale).clamp(minFontSize, 80.0),
@@ -51,7 +56,7 @@ class _InfoItemState extends State<InfoItem> {
                   ),
                   Gap(AppSizes.double4),
                   Text(
-                    'Заряжается',
+                    station.status,
                     style: context.text.semiBold24.copyWith(
                       color: context.color.onBackground,
                       fontSize: (25 * scale).clamp(minFontSize, 50.0),
@@ -69,7 +74,7 @@ class _InfoItemState extends State<InfoItem> {
                       ),
                       Gap(AppSizes.double12),
                       Text(
-                        '17:02',
+                        '${station.startTime.hour.toString().padLeft(2, '0')}:${station.startTime.minute.toString().padLeft(2, '0')}',
                         style: context.text.regular16.copyWith(
                           color: context.color.onBackground,
                           fontSize: (25 * scale).clamp(minFontSize, 50.0),
@@ -88,7 +93,7 @@ class _InfoItemState extends State<InfoItem> {
                       ),
                       Gap(AppSizes.double12),
                       Text(
-                        '8 мин',
+                        '${station.durationMinutes} мин',
                         style: context.text.regular16.copyWith(
                           color: context.color.onBackground,
                           fontSize: (25 * scale).clamp(minFontSize, 50.0),
@@ -110,7 +115,7 @@ class _InfoItemState extends State<InfoItem> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        '2.7 кВт•ч',
+                        '${station.powerConsumed.toStringAsFixed(1)} кВт•ч',
                         style: context.text.semiBold24.copyWith(
                           color: context.color.onBackground,
                           fontSize: (50 * scale).clamp(minFontSize, 80.0),
@@ -118,7 +123,7 @@ class _InfoItemState extends State<InfoItem> {
                       ),
                       Gap(AppSizes.double4),
                       Text(
-                        '2% ⇒ 13%',
+                        '${station.startPercentage}% ⇒ ${station.currentPercentage}%',
                         style: context.text.regular16.copyWith(
                           color: context.color.onBackground,
                           fontSize: (45 * scale).clamp(minFontSize, 70.0),
@@ -137,7 +142,7 @@ class _InfoItemState extends State<InfoItem> {
                     height: 45 * scale,
                   ),
                   Text(
-                    '20.7 кВт',
+                    '${station.powerOutput.toStringAsFixed(1)} кВт',
                     style: context.text.semiBold31.copyWith(
                       color: context.color.onBackground,
                       fontSize: (45 * scale).clamp(minFontSize, 70.0),
@@ -155,24 +160,30 @@ class _InfoItemState extends State<InfoItem> {
 
 class InfoItemsGrid extends StatelessWidget {
   final int itemsCount;
+  final RxList<ChargingStation> stations;
 
-  const InfoItemsGrid({super.key, required this.itemsCount});
+  const InfoItemsGrid({
+    super.key,
+    required this.itemsCount,
+    required this.stations,
+  });
 
   @override
   Widget build(BuildContext context) {
     double fontScale = 1.0;
 
     if (itemsCount >= 11) {
-      fontScale = 0.6;  
+      fontScale = 0.6;
     } else if (itemsCount >= 9) {
       fontScale = 0.6;
     } else if (itemsCount >= 5) {
       fontScale = 0.9;
     }
-    final items = List.generate(
-      itemsCount,
-      (index) => InfoItem(fontScale: fontScale),
-    );
+
+    final items =
+        stations
+            .map((station) => InfoItem(fontScale: fontScale, station: station))
+            .toList();
 
     if (itemsCount <= 2) {
       return Column(children: [_buildGrid(items, context), const Spacer()]);
